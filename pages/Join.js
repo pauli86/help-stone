@@ -19,13 +19,15 @@ export default class Join extends Component {
   }
   join(){
     if(this.state.pw!=this.state.pwChk){
-      Alert.alert('비밀번호','비밀번호가 다릅니다.\n비밀번호를 확인해주세요.');
+      return Alert.alert('비밀번호','비밀번호가 다릅니다.\n비밀번호를 확인해주세요.');      
     }
     
     let ret = Service.join(this.state);
-    if(ret){
+    if(ret.result==1){
       Alert.alert('가입성공','로그인 페이지로 이동합니다.');
       Service.goto('login');
+    }else{
+      Alert.alert('가입실패',ret.msg);
     }
 
   }

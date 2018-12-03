@@ -11,6 +11,7 @@ import PwFind from './pages/PwFind';
 import Main from './pages/Main';
 import CreateProject from './pages/CreateProject';
 
+import ProjectTab from './pages/ProjectTab';
 
 class Loading extends Component {
   render() {
@@ -66,6 +67,14 @@ export default class App extends Component {
         return <Login/>
       case 'join':
         return <Join/>
+      case 'projectTab':
+        return <ProjectTab/>
+      case 'createProject':
+        return <CreateProject/>
+      case 'idFind':
+        return <IdFind/>
+      case 'pwFind':
+        return <PwFind/>
     }
     return;
   }
@@ -85,7 +94,7 @@ export default class App extends Component {
     if(!this.state.isLoaded){
       setTimeout(function(){
         console.log('set time out');
-        Service.changeFunc('login');
+        Service.changeFunc('projectTab');
       },3000);  
     }
   }
