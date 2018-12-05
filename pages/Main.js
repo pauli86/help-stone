@@ -1,50 +1,64 @@
 import React, { Component } from 'react'
 import { StyleSheet,Image, Text, View, Dimensions,  ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 
+import Service from '../lib/service';
+
 const {width, height} = Dimensions.get('window');
 export default class Main extends Component {
-    state= {
-        progressPercent: '80%',
-        periodPercent: '30%'
+    constructor(props){
+        super(props)
+        
+        this.state= {        
+            ongoing:[],
+            done:[],
+            // progressPercent: '0%',
+            // periodPercent: '0%'            
+        }
+        
+    
     }
-  render() {
-    return (
-        <View style={styles.container}>
-         <StatusBar hidden={true}/>
-            <ScrollView contentContainerStyle={{width: width}}>
-            <View style={styles.logoContainer}>
-                <Image source={require('../assets/logo.jpg')} style={styles.logoImg}/>
-                <Text style={styles.logoText}>COMPUTER ENGINEERING</Text>
-            </View>
-            <View style={styles.contentWrap}>
-            <View style={styles.mainWrap}>
-                <TouchableOpacity style={styles.newProjectContainer}>
-                    <Text style={{color: "#fff", fontWeight:'bold',fontSize: 18}}>새 프로젝트 생성</Text>
-                </TouchableOpacity>
-
-
-                {/* 진행중 프로젝트 section */}
-                <View style={styles.projectSector}>
-                    <Text style={styles.projectSectorText}>진행중인 프로젝트 : 1개</Text>
-                </View>
-
-                {/* !!! projectContainer는 
-                프로젝트가 없으면 View, 
-                프로젝트가 있으면 TouchableOpacity 이에요 */}
-
-                {/* 프로젝트가 있어서 TouchableOpacity */}
-                <TouchableOpacity style={styles.projectContainer}>
-                    <Text style={styles.projectTitle}>프로젝트 A</Text>
-                    <Text style={styles.projectText}>PM : 홍길동</Text>
-                    <Text style={styles.projectText}>Member : 3명</Text>
+    componentDidMount(){
+        
+        this.setState({
+            ongoing:Service.projectAll.ongoing,
+            done:Service.projectAll.done,
+            //ongoing:this.state.ongoing,
+            //done:this.state.done,
+        })
+    }
+    projectList(plist){
+        if(plist.length===0) return (
+        <View style={styles.projectContainer}>            
+            <Text style={styles.noProjectText}>완료한 프로젝트가 없습니다.</Text>
+        </View>
+        )
+        else return plist.map(p=>{
+            let leftDay = Math.floor(((new Date(p.project.dueDate)) - (new Date()))/(1000*60*60*24));
+            let totalDay = Math.floor(((new Date(p.project.dueDate)) - (new Date(p.project.startDate)))/(1000*60*60*24));
+            let periodPercent = Math.floor((leftDay/totalDay)*100) + '%';
+            let doneTaskCnt = p.meta.doneTaskCnt?p.meta.doneTaskCnt:0;
+            let doneDoCnt = p.meta.doneDoCnt?p.meta.doneDoCnt:0;
+            let totalTaskCnt = p.meta.totalTaskCnt?p.meta.totalTaskCnt:0;
+            let totalDoCnt = p.meta.totalDoCnt?p.meta.totalDoCnt:0;
+            
+            let doneAllCnt = doneDoCnt + doneTaskCnt;
+            let totalAllCnt = totalDoCnt + totalTaskCnt;
+            let progressPercent = Math.floor((doneAllCnt/totalAllCnt)*100)?Math.floor((doneAllCnt/totalAllCnt)*100):0 +'%';
+            return ( 
+                <TouchableOpacity 
+                onPress={()=>{Service.goto('projectTab')}}
+                style={styles.projectContainer}>
+                    <Text style={styles.projectTitle}>{p.project.title}</Text>
+                    <Text style={styles.projectText}>PM : {p.project.manager.name}({p.project.manager.id})</Text>
+                    <Text style={styles.projectText}>Member : {p.project.team.length}명</Text>
                     <View style={styles.rangeWrap}>
                         <View style={styles.rangeTitleWrap}>
                             <View style={styles.rangeTitleView}>
                                 <Text style={styles.rangeTitle}>진행도</Text>
                             </View>
                             <View style={styles.rangeColorWrap}>
-                                <Text style={styles.rangeText}>20/30 ({this.state.progressPercent})</Text>
-                                <View style={[styles.rangeColor,{width:this.state.progressPercent,backgroundColor:'#ffb74d'}]}></View>
+                                <Text style={styles.rangeText}>{p.meta.doneTaskCnt}({p.meta.doneDoCnt})/{p.meta.totalTaskCnt}({p.meta.totalDoCnt}) [{progressPercent}]</Text>
+                                <View style={[styles.rangeColor,{width:progressPercent,backgroundColor:'#ffb74d'}]}></View>
                             </View>
                         </View>
                     </View>
@@ -54,23 +68,57 @@ export default class Main extends Component {
                                 <Text style={styles.rangeTitle}>기간</Text>
                             </View>
                             <View style={styles.rangeColorWrap}>
-                                <Text style={styles.rangeText}>30일/92일 ({this.state.periodPercent})</Text>
-                                <View style={[styles.rangeColor,{width:this.state.periodPercent,backgroundColor:'#81d4fa'}]}></View>
+                                <Text style={styles.rangeText}>{leftDay} 일 / {totalDay} 일 ({periodPercent})</Text>
+                                <View style={[styles.rangeColor,{width:periodPercent,backgroundColor:'#81d4fa'}]}></View>
                             </View>
                         </View>
                     </View>
                 </TouchableOpacity>
+            )
+        })
+    }
+    render() {
+        return (
+        <View style={styles.container}>
+         <StatusBar hidden={true}/>
+            <ScrollView contentContainerStyle={{width: width}}>
+            <View style={styles.logoContainer}>
+                <Image source={require('../assets/logo.jpg')} style={styles.logoImg}/>
+                <Text style={styles.logoText}>COMPUTER ENGINEERING</Text>
+            </View>
+            <View style={styles.contentWrap}>
+            <View style={styles.mainWrap}>
+                <TouchableOpacity style={styles.newProjectContainer}
+                     onPress={()=>{
+                        Service.goto('createProject');
+                     }}
+                >
+                    <Text style={{color: "#fff", fontWeight:'bold',fontSize: 18}}>새 프로젝트 생성</Text>
+                </TouchableOpacity>
+
+
+                {/* 진행중 프로젝트 section */}
+                <View style={styles.projectSector}>
+                    <Text style={styles.projectSectorText}>진행중인 프로젝트 : {this.state.ongoing.length}개</Text>
+                </View>
+
+                {/* !!! projectContainer는 
+                프로젝트가 없으면 View, 
+                프로젝트가 있으면 TouchableOpacity  */}
+                {this.projectList(this.state.ongoing)}
+               
 
                 {/* 완료 프로젝트 section */}
                 <View style={styles.projectSector}>
-                    <Text style={styles.projectSectorText}>완료한 프로젝트 : 0개</Text>
+                    <Text style={styles.projectSectorText}>완료한 프로젝트 : {this.state.done.length}개</Text>
                 </View>
 
                 {/* 얘는 프로젝트가 없어서 View */}
-                <View style={styles.projectContainer}>
-                    {/* 없는애는 Text의 class도 바껴요 */}
-                    <Text style={styles.noProjectText}>완료한 프로젝트가 없습니다.</Text>
-                </View>
+                {/* <View style={styles.projectContainer}> */}
+                    {/* 없는애는 Text의 class도 바뀜 */}
+                    {/* <Text style={styles.noProjectText}>완료한 프로젝트가 없습니다.</Text>
+                </View> */}
+                {this.projectList(this.state.done)}
             </View>
         </View>
             </ScrollView>

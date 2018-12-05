@@ -1,9 +1,47 @@
 import React, { Component } from 'react'
 import { StyleSheet,Image, Text, View, Dimensions, Button, ScrollView, StatusBar,TouchableOpacity,TextInput } from 'react-native';
 
+import Service from '../lib/service';
+
 const {width, height} = Dimensions.get('window');
 
 export default class CreateProject extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            title:'',
+            desc:'',
+            dueDate:'',
+            manager:'',
+            team:[],
+            viewUser2:'',
+        }
+    }
+    componentDidMount(){
+        Service.updateTeam = ()=>{this.updateTeam2()};
+        this.setState({
+            manager:Service.user._id
+        });
+    }
+    updateTeam2(){      
+        this.setState({
+            team:Service.team
+        });
+    }
+    
+    listTeam(team){
+        if(team.length){
+            return team.map((user,idx)=>(
+                <View style={styles.memberItem}>
+                    <Text style={styles.memberName}> 이름 : { user.name }  아이디 : {user.id} </Text>
+                    <Button 
+                    onPress={()=>{Service.removeTeam(user.id)}}
+                    title="삭제" color="#777"/>
+                </View>
+            ))
+        }
+    }
+
   render() {
     return (
         <View style={styles.container}>
@@ -18,21 +56,27 @@ export default class CreateProject extends Component {
                     <View style={styles.inputWrap}>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputTitle}>프로젝트 제목</Text>
-                        <TextInput style={styles.input} placeholder="제목을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+                        <TextInput 
+                        onChangeText={(val)=>{this.setState({title:val})}}
+                        value={this.state.title}
+                        style={styles.input} placeholder="제목을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
                     </View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputTitle}>프로젝트 설명</Text>
-                        <TextInput style={styles.input} placeholder="설명을 입력하세요." numberOfLines={5} multiline={true} spellCheck={false} underlineColorAndroid="#fff"/>
+                        <TextInput 
+                        onChangeText={(val)=>{this.setState({desc:val})}}
+                        value={this.state.desc}
+                        style={styles.input} placeholder="설명을 입력하세요." numberOfLines={5} multiline={true} spellCheck={false} underlineColorAndroid="#fff"/>
                     </View>
                     <View style={styles.inputContainer}>
-                        <Text style={styles.inputTitle}>프로젝트 예상 기간</Text>
+                        <Text style={styles.inputTitle}>프로젝트 기한</Text>
                         <View style={styles.periodView}>
-                            <View style={styles.dayView}>
+                            {/* <View style={styles.dayView}>
                                 <Text style={styles.dayText}>시작 날짜</Text>
                                 <TextInput style={[styles.input,styles.dayInput]} keyboardType="number-pad" maxLength={8} placeholder="YYYYMMDD" spellCheck={false} underlineColorAndroid="#fff"/>
-                            </View>
+                            </View> */}
                             <View style={styles.dayView}>
-                                <Text style={styles.dayText}>마감 날짜</Text>
+                                <Text style={styles.dayText}>마감일자 [ YYYYMMDD ]</Text>
                                 <TextInput style={[styles.input,styles.dayInput]} keyboardType="number-pad" maxLength={8} placeholder="YYYYMMDD" spellCheck={false} underlineColorAndroid="#fff"/>
                             </View>
                         </View>
@@ -41,18 +85,18 @@ export default class CreateProject extends Component {
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputTitle}>프로젝트 참여 멤버</Text>
                         <View style={styles.memberView}>
-                            <TextInput style={[styles.input, styles.memberInput]} placeholder="추가할 멤버 ID를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
-                            <Button title=" 추가 " />
+                            <TextInput 
+                            onChangeText={(val)=>{this.setState({viewUser2:val})}}
+                            value={this.state.viewUser2}
+                            style={[styles.input, styles.memberInput]} placeholder="추가할 멤버 ID를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+                            <Button 
+                            onPress={()=>{                                
+                                Service.viewUser(this.state.viewUser2);
+                              }}
+                            title=" 추가 " />
                         </View>
-                        <View style={styles.memberList}>
-                                <View style={styles.memberItem}>
-                                    <Text style={styles.memberName}>1. testID(testName)</Text>
-                                    <Button title="삭제" color="#777"/>
-                                </View>
-                                <View style={styles.memberItem}>
-                                    <Text style={styles.memberName}>2. testID(testName)</Text>
-                                    <Button title="삭제" color="#777"/>
-                                </View>
+                        <View style={styles.memberList}>                               
+                               {this.listTeam(this.state.team)}                               
                             </View>
                         
                     </View>
@@ -62,7 +106,11 @@ export default class CreateProject extends Component {
                         <Button title="프로젝트 생성" color="#345080"/>
                         </View>
                         <View style={styles.btnContainer}>
-                        <Button title="취소" color="#77787b"/>
+                        <Button 
+                        onPress={()=>{
+                            Service.goto('main');
+                        }}
+                        title="취소" color="#77787b"/>
                         </View>
               </View>
                 </View>

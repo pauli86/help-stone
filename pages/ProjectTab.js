@@ -7,9 +7,52 @@ import CompleteTask from './CompleteTask';
 import Member from './Member';
 import Record from './Record';
 
+import Service from '../lib/service';
+
 const {width, height} = Dimensions.get('window');
 
 export default class ProjectTab extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            currennt:'summary'
+        }
+    }
+    navigate(val){
+        this.setState({
+            current:val
+        })
+    }
+    getScreen(){
+        switch(this.state.current){
+            case 'summary':
+            return <Summary/>
+            case 'ingTask':
+            return <IngTask/>
+            case 'completeTask':
+            return <CompleteTask/>
+            case 'member':
+            return <Member/>
+            case 'record':
+            return <Record/>
+        }
+    }
+    getStyle(val){
+        if(this.state.current===val){
+            console.log('선택된 스타일',val);
+            return [styles.tabBtn,styles.activeTab];
+        }else{
+            console.log('선택안된 스타일',val);
+            return styles.tabBtn;
+            
+        }
+    }
+    componentDidMount(){
+        console.log('[APP][componentDidMount]');    
+        Service.changeFuncPTab = (v)=>{this.navigate(v)};    
+        console.log('set time out');
+        Service.changeFuncPTab('summary');
+      }
   render() {
     return (
         <View style={styles.container}>
@@ -23,30 +66,48 @@ export default class ProjectTab extends Component {
                 </View>
                 <View style={styles.tabView}>
                     {/* 활성화 된 탭에는 styles.activeTab 붙여줘야해요 */}
-                    <TouchableOpacity style={[styles.tabBtn,styles.activeTab]}>
+                    <TouchableOpacity 
+                    onPress={()=>{
+                        Service.changeFuncPTab('summary');
+                    }}
+                    style={this.getStyle('summary')}>
                         <Text style={styles.tabText}>전체 현황</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabBtn}>
-                        <Text style={styles.tabText}>진행중인 태스크</Text>
+                    <TouchableOpacity 
+                    onPress={()=>{
+                        Service.changeFuncPTab('ingTask');
+                    }}
+                    style={this.getStyle('ingTask')}>
+                        <Text style={styles.tabText}>진행중인</Text>
+                        <Text style={styles.tabText}>태스크</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabBtn}>
-                        <Text style={styles.tabText}>완료한 태스크</Text>
+                    <TouchableOpacity 
+                    onPress={()=>{
+                        Service.changeFuncPTab('completeTask');
+                    }}
+                    style={this.getStyle('completeTask')}>
+                        <Text style={styles.tabText}>완료한</Text>
+                        <Text style={styles.tabText}>태스크</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabBtn}>
+                    <TouchableOpacity 
+                    onPress={()=>{
+                        Service.changeFuncPTab('member');
+                    }}
+                    style={this.getStyle('member')}>
                         <Text style={styles.tabText}>멤버</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabBtn}>
+                    <TouchableOpacity 
+                    onPress={()=>{
+                        Service.changeFuncPTab('record');
+                    }}
+                    style={this.getStyle('record')}>
                         <Text style={styles.tabText}>기록</Text>
                     </TouchableOpacity>
                 </View>
             </View>
             
             <ScrollView contentContainerStyle={{width: width}}>
-                <Summary/>
-                <IngTask/>
-                {/* <CompleteTask/> */}
-                {/* <Member/> */}
-                {/* <Record/> */}
+                {this.getScreen()}
             </ScrollView>
             </View>
     )

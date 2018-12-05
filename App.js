@@ -94,8 +94,10 @@ export default class App extends Component {
     if(!this.state.isLoaded){
       setTimeout(function(){
         console.log('set time out');
-        Service.changeFunc('projectTab');
-      },3000);  
+        Service.changeFunc('login');
+        // test 하는동안 여기서 바로 페이지 이동
+       //Service.goto('createProject');
+      },300);  
     }
   }
   render() {
