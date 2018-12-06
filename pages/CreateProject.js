@@ -32,9 +32,9 @@ export default class CreateProject extends Component {
     listTeam(team){
         if(team.length){
             return team.map((user,idx)=>(
-                <View style={styles.memberItem}>
+                <View key={'v'+idx} style={styles.memberItem}>
                     <Text style={styles.memberName}> 이름 : { user.name }  아이디 : {user.id} </Text>
-                    <Button 
+                    <Button key={user.id}
                     onPress={()=>{Service.removeTeam(user.id)}}
                     title="삭제" color="#777"/>
                 </View>
@@ -103,7 +103,11 @@ export default class CreateProject extends Component {
                     </View>
                     <View style={styles.btnWrap}>
                         <View style={styles.btnContainer}>
-                        <Button title="프로젝트 생성" color="#345080"/>
+                        <Button 
+                        onPress={()=>{
+                            Service.createProject(this.state);
+                        }}
+                        title="프로젝트 생성" color="#345080"/>
                         </View>
                         <View style={styles.btnContainer}>
                         <Button 

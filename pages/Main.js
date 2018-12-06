@@ -45,7 +45,7 @@ export default class Main extends Component {
             let totalAllCnt = totalDoCnt + totalTaskCnt;
             let progressPercent = Math.floor((doneAllCnt/totalAllCnt)*100)?Math.floor((doneAllCnt/totalAllCnt)*100):0 +'%';
             return ( 
-                <TouchableOpacity 
+                <TouchableOpacity key={p.project._id}
                 onPress={()=>{Service.goto('projectTab')}}
                 style={styles.projectContainer}>
                     <Text style={styles.projectTitle}>{p.project.title}</Text>
