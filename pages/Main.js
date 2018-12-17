@@ -6,25 +6,48 @@ import Service from '../lib/service';
 const {width, height} = Dimensions.get('window');
 export default class Main extends Component {
     constructor(props){
-        super(props)
-        
+        super(props);        
         this.state= {        
+            setMainInfoFlag:false,
             ongoing:[],
             done:[],
             // progressPercent: '0%',
-            // periodPercent: '0%'            
-        }
-        
-    
+            // periodPercent: '0%'
+                        
+        };
+        // this.pchk='none';        
     }
-    componentDidMount(){
+    // projectChk(){
+    //     this.pchk = setInterval(()=>{
+    //         Service.chkMainInfo();
+    //     },3000);
+    // }
+    // componentDidUpdate(){
+    //     console.log('didupdate');
         
-        this.setState({
-            ongoing:Service.projectAll.ongoing,
-            done:Service.projectAll.done,
-            //ongoing:this.state.ongoing,
-            //done:this.state.done,
-        })
+    // }
+    // componentWillMount(){
+    //     console.log('component will mount');
+    //     if(this.pchk==='none');
+    //     this.projectChk();
+    // }
+    // componentWillUnmount(){
+    //     console.log('component will unmount');
+    //     clearInterval(this.pchk);
+    //     this.pchk = 'none';
+    // }
+    componentDidMount(){
+        if(!this.state.setMainInfoFlag){
+            this.setState({setMainInfoFlag:true});
+            Service.setMainInfo = (v)=>{this.setState(v)}
+        }        
+        Service.getMainInfo();        
+        // this.setState({
+        //     ongoing:Service.projectAll.ongoing,
+        //     done:Service.projectAll.done,
+        //     //ongoing:this.state.ongoing,
+        //     //done:this.state.done,
+        // })
     }
     projectList(plist){
         if(plist.length===0) return (

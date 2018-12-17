@@ -18,6 +18,7 @@ export default class CreateProject extends Component {
         }
     }
     componentDidMount(){
+        Service.team = [];
         Service.updateTeam = ()=>{this.updateTeam2()};
         this.setState({
             manager:Service.user._id
@@ -77,7 +78,11 @@ export default class CreateProject extends Component {
                             </View> */}
                             <View style={styles.dayView}>
                                 <Text style={styles.dayText}>마감일자 [ YYYYMMDD ]</Text>
-                                <TextInput style={[styles.input,styles.dayInput]} keyboardType="number-pad" maxLength={8} placeholder="YYYYMMDD" spellCheck={false} underlineColorAndroid="#fff"/>
+                                <TextInput 
+                                onChangeText={(val)=>{
+                                    this.setState({dueDate:val});
+                                }}
+                                style={[styles.input,styles.dayInput]} keyboardType="number-pad" maxLength={8} placeholder="YYYYMMDD" spellCheck={false} underlineColorAndroid="#fff"/>
                             </View>
                         </View>
                         

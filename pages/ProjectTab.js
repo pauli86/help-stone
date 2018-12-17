@@ -60,7 +60,9 @@ export default class ProjectTab extends Component {
             <View style={styles.tabWrap}>
                 <View style={styles.headerView}>
                     <Text style={styles.projectTitle}>프로젝트 A</Text>
-                    <TouchableOpacity style={styles.backBtnView}>
+                    <TouchableOpacity 
+                    onPress={()=>{Service.goto('main')}}
+                    style={styles.backBtnView}>
                         <Ionicons name='ios-close' color='#4f4e4e' size={40}/>
                     </TouchableOpacity>
                 </View>
