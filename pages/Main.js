@@ -15,27 +15,27 @@ export default class Main extends Component {
             // periodPercent: '0%'
                         
         };
-        // this.pchk='none';        
+        this.pchk='none';        
     }
-    // projectChk(){
-    //     this.pchk = setInterval(()=>{
-    //         Service.chkMainInfo();
-    //     },3000);
-    // }
-    // componentDidUpdate(){
-    //     console.log('didupdate');
+    projectChk(){
+        this.pchk = setInterval(()=>{
+            Service.chkMainInfo();
+        },3000);
+    }
+    componentDidUpdate(){
+        console.log('didupdate');
         
-    // }
-    // componentWillMount(){
-    //     console.log('component will mount');
-    //     if(this.pchk==='none');
-    //     this.projectChk();
-    // }
-    // componentWillUnmount(){
-    //     console.log('component will unmount');
-    //     clearInterval(this.pchk);
-    //     this.pchk = 'none';
-    // }
+    }
+    componentWillMount(){
+        console.log('component will mount');
+        if(this.pchk==='none');
+        this.projectChk();
+    }
+    componentWillUnmount(){
+        console.log('component will unmount');
+        clearInterval(this.pchk);
+        this.pchk = 'none';
+    }
     componentDidMount(){
         if(!this.state.setMainInfoFlag){
             this.setState({setMainInfoFlag:true});
@@ -49,16 +49,30 @@ export default class Main extends Component {
         //     //done:this.state.done,
         // })
     }
-    projectList(plist){
+    projectList(plist,flag){
         if(plist.length===0) return (
         <View style={styles.projectContainer}>            
             <Text style={styles.noProjectText}>완료한 프로젝트가 없습니다.</Text>
         </View>
         )
-        else return plist.map(p=>{
-            let leftDay = Math.floor(((new Date(p.project.dueDate)) - (new Date()))/(1000*60*60*24));
-            let totalDay = Math.floor(((new Date(p.project.dueDate)) - (new Date(p.project.startDate)))/(1000*60*60*24));
-            let periodPercent = Math.floor((leftDay/totalDay)*100) + '%';
+        else return plist.map((p,idx)=>{
+            
+            
+            // console.log((new Date(p.project.dueDate)) - (new Date(p.project.startDate)));
+            let leftTime = ((new Date(p.project.dueDate)) - (new Date()))/(1000*60*60*24);            
+            let totalTime = ((new Date(p.project.dueDate)) - (new Date(p.project.startDate)))/(1000*60*60*24);
+            leftTime = totalTime - leftTime;
+            
+            let leftDay = Math.floor(leftTime);
+            // console.log('left Time : ',leftTime, ' , left Day : ',leftDay);
+            leftDay = Math.abs(leftDay)>=1?leftDay+' 일':Math.floor(leftTime*24) + ' 시간';
+            let totalDay = Math.floor(totalTime);
+            // console.log('total Time : ',totalTime, ' , total Day : ',totalDay);
+            totalDay = Math.abs(totalDay)>=1?totalDay+' 일':Math.floor(totalTime*24) + ' 시간';
+
+            
+            let periodPercent = Math.floor((leftTime/totalTime)*100) + '%';
+            let delayFlag = (leftTime/totalTime)>1?true:false;
             let doneTaskCnt = p.meta.doneTaskCnt?p.meta.doneTaskCnt:0;
             let doneDoCnt = p.meta.doneDoCnt?p.meta.doneDoCnt:0;
             let totalTaskCnt = p.meta.totalTaskCnt?p.meta.totalTaskCnt:0;
@@ -69,7 +83,10 @@ export default class Main extends Component {
             let progressPercent = Math.floor((doneAllCnt/totalAllCnt)*100)?Math.floor((doneAllCnt/totalAllCnt)*100):0 +'%';
             return ( 
                 <TouchableOpacity key={p.project._id}
-                onPress={()=>{Service.goto('projectTab')}}
+                onPress={()=>{
+                    Service.selectProject(flag,idx);
+                    Service.goto('projectTab');
+                }}
                 style={styles.projectContainer}>
                     <Text style={styles.projectTitle}>{p.project.title}</Text>
                     <Text style={styles.projectText}>PM : {p.project.manager.name}({p.project.manager.id})</Text>
@@ -80,7 +97,7 @@ export default class Main extends Component {
                                 <Text style={styles.rangeTitle}>진행도</Text>
                             </View>
                             <View style={styles.rangeColorWrap}>
-                                <Text style={styles.rangeText}>{p.meta.doneTaskCnt}({p.meta.doneDoCnt})/{p.meta.totalTaskCnt}({p.meta.totalDoCnt}) [{progressPercent}]</Text>
+                                <Text style={styles.rangeText}>태스크 : {p.meta.doneTaskCnt} / {p.meta.totalTaskCnt}  [ 할 일: {p.meta.doneDoCnt} / {p.meta.totalDoCnt} ] ({progressPercent})</Text>
                                 <View style={[styles.rangeColor,{width:progressPercent,backgroundColor:'#ffb74d'}]}></View>
                             </View>
                         </View>
@@ -91,8 +108,8 @@ export default class Main extends Component {
                                 <Text style={styles.rangeTitle}>기간</Text>
                             </View>
                             <View style={styles.rangeColorWrap}>
-                                <Text style={styles.rangeText}>{leftDay} 일 / {totalDay} 일 ({periodPercent})</Text>
-                                <View style={[styles.rangeColor,{width:periodPercent,backgroundColor:'#81d4fa'}]}></View>
+                                <Text style={styles.rangeText}>{leftDay} / {totalDay} ({periodPercent})</Text>
+                                <View style={[styles.rangeColor,{width:delayFlag?'100%':periodPercent,backgroundColor:delayFlag?'#fa8181':'#81d4fa'}]}></View>
                             </View>
                         </View>
                     </View>
@@ -128,7 +145,7 @@ export default class Main extends Component {
                 {/* !!! projectContainer는 
                 프로젝트가 없으면 View, 
                 프로젝트가 있으면 TouchableOpacity  */}
-                {this.projectList(this.state.ongoing)}
+                {this.projectList(this.state.ongoing,'ongoing')}
                
 
                 {/* 완료 프로젝트 section */}
@@ -141,7 +158,7 @@ export default class Main extends Component {
                     {/* 없는애는 Text의 class도 바뀜 */}
                     {/* <Text style={styles.noProjectText}>완료한 프로젝트가 없습니다.</Text>
                 </View> */}
-                {this.projectList(this.state.done)}
+                {this.projectList(this.state.done,'done')}
             </View>
         </View>
             </ScrollView>
