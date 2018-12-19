@@ -15,7 +15,8 @@ export default class ProjectTab extends Component {
     constructor(props){
         super(props);
         this.state={
-            currennt:'summary'
+            currennt:'summary',
+            
         }
     }
     navigate(val){
@@ -59,7 +60,7 @@ export default class ProjectTab extends Component {
          <StatusBar hidden={true}/>
             <View style={styles.tabWrap}>
                 <View style={styles.headerView}>
-                    <Text style={styles.projectTitle}>프로젝트 A</Text>
+                    <Text style={styles.projectTitle}>{Service.project.project.title}</Text>
                     <TouchableOpacity 
                     onPress={()=>{Service.goto('main')}}
                     style={styles.backBtnView}>

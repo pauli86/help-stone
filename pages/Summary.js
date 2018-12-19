@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Service from '../lib/service';
 import { StyleSheet,Image, Text, View, Dimensions,  ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -16,19 +17,21 @@ export default class Summary extends Component {
             <View style={styles.sectionWrap}>
                 <Text style={styles.sectionTitle}>제목</Text>
                 <View style={styles.sectionView}>
-                    <Text style={styles.sectionContent}>헬프스톤</Text>
+                    <Text style={styles.sectionContent}>{Service.project.project.title}</Text>
                 </View>
             </View>
             <View style={styles.sectionWrap}>
                 <Text style={styles.sectionTitle}>설명</Text>
                 <View style={styles.sectionView}>
-                    <Text style={styles.sectionContent}>팀원 간 프로젝트 진행상황 및 각 팀원의 태스크 등을 공유할 수 있게 도움을 주는 간단한 프로젝트 보조 도구</Text>
+                    {/* <Text style={styles.sectionContent}>팀원 간 프로젝트 진행상황 및 각 팀원의 태스크 등을 공유할 수 있게 도움을 주는 간단한 프로젝트 보조 도구</Text> */}
+                    <Text style={styles.sectionContent}>{Service.project.project.desc}</Text>
                 </View>
             </View>
             <View style={styles.sectionWrap}>
                 <Text style={styles.sectionTitle}>시작일</Text>
                 <View style={styles.sectionView}>
-                    <Text style={styles.sectionContent}>2018-11-28</Text>
+                    {/* <Text style={styles.sectionContent}>2018-11-28</Text> */}
+                    <Text style={styles.sectionContent}>{(new Date(Service.project.project.startDate)).toLocaleDateString()}</Text>
                 </View>
             </View>
             <View style={styles.sectionWrap}>
