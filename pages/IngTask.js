@@ -237,8 +237,7 @@ export default class IngTask extends Component {
                             <Fragment>
                                  <TouchableOpacity
                             onPress={()=>{
-                                console.log('todo complete button pressed');
-                                Service.refreshOngoingTask({editTodoIdx:'d'+didx,doTitle:todo.title})                       
+                                console.log('todo complete button pressed');                                                       
                             }}
                             style={styles.todoBtn}>
                             {todo.state==='done'?                            
@@ -252,16 +251,16 @@ export default class IngTask extends Component {
                                 </View>                            
                                 <TouchableOpacity
                                 onPress={()=>{
-                                if(this.state.editTodoIdx==='d'+didx){
-                                    Service.refreshOngoingTask({editTodoIdx:'d',dotitle:''})
-                                }else{
-                                    Service.refreshOngoingTask({editTodoIdx:'d'+didx,dotitle:''})
-                                }                                
+                                    Service.refreshOngoingTask({editTodoIdx:'d'+didx,doTitle:todo.title})
                                 }}
                                 style={styles.todoBtn}>
                                 <Ionicons name='ios-create' color='#4f4e4e' size={20}/>                            
                                 </TouchableOpacity>                            
-                                <TouchableOpacity style={styles.todoBtn}>
+                                <TouchableOpacity
+                                onPress={()=>{
+                                    
+                                }}
+                                style={styles.todoBtn}>
                                     <Ionicons name='ios-close-circle' color='#f44336' size={20}/>
                                 </TouchableOpacity>
                                 </Fragment>
