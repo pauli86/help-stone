@@ -15,27 +15,43 @@ export default class ProjectTab extends Component {
     constructor(props){
         super(props);
         this.state={
-            currennt:'summary',
-            
+            current:'summary',
+            project:Service.project,
+            meta:Service.meta,
+            manager:Service.manager,
+            team:Service.team,
+            doneTask:Service.doneTask,
+            ongoingTask:Service.ongoingTask,
+            pFlag:false
         }
     }
+    componentWillMount(){
+        console.log('[ project tab ] will mount');
+        Service.updateProject = (v)=>{
+            this.setState(v);
+        }
+    }
+    
     navigate(val){
         this.setState({
             current:val
         })
     }
+
     getScreen(){
+        console.log('[ project tab ] get Screen');
+        
         switch(this.state.current){
             case 'summary':
-            return <Summary/>
+            return <Summary project={this.state.project} meta={this.state.meta} manager={this.state.manager} team={this.state.team}/>
             case 'ingTask':
-            return <IngTask/>
+            return <IngTask project={this.state.project} meta={this.state.meta} manager={this.state.manager} team={this.state.team} ongoingTask={this.state.ongoingTask}/>
             case 'completeTask':
-            return <CompleteTask/>
+            return <CompleteTask project={this.state.project} meta={this.state.meta} manager={this.state.manager} team={this.state.team} doneTask={this.state.doneTask}/>
             case 'member':
-            return <Member/>
+            return <Member project={this.state.project} meta={this.state.meta} manager={this.state.manager} team={this.state.team}/>
             case 'record':
-            return <Record/>
+            return <Record project={this.state.project} meta={this.state.meta} manager={this.state.manager} team={this.state.team}/>
         }
     }
     getStyle(val){
@@ -53,6 +69,15 @@ export default class ProjectTab extends Component {
         Service.changeFuncPTab = (v)=>{this.navigate(v)};    
         console.log('set time out');
         Service.changeFuncPTab('summary');
+        this.setState({
+            pFlag:true,
+            project:Service.project,
+            meta:Service.meta,
+            manager:Service.manager,
+            doneTask:Service.doneTask,
+            ongoingTask:Service.ongoingTask,
+            team:Service.team
+        })
       }
   render() {
     return (
@@ -60,7 +85,7 @@ export default class ProjectTab extends Component {
          <StatusBar hidden={true}/>
             <View style={styles.tabWrap}>
                 <View style={styles.headerView}>
-                    <Text style={styles.projectTitle}>{Service.project.project.title}</Text>
+                    <Text style={styles.projectTitle}>{this.state.pFlag?this.state.project.title:''}</Text>
                     <TouchableOpacity 
                     onPress={()=>{Service.goto('main')}}
                     style={styles.backBtnView}>

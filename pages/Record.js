@@ -2,11 +2,49 @@ import React, { Component } from 'react'
 import { StyleSheet,Image, Text, View, Dimensions,  ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 
 export default class Record extends Component {
+    viewLog(){
+        /**
+         * log view 
+         * project crud -> [ user ] sector - title - action
+         * task crud -> [ user ] sector - title - action
+         * todo crud -> [ user ] [ task ] - sector - title - action
+         *  */
+
+        let logView=[];   
+        let logs = this.props.project.logList;     
+        let logLength = logs.length;
+        
+        for(let i = logLength-1;i>=0;i--){
+            let u = logs[i].user?logs[i].user.name:'-';
+            let task = logs[i].task?logs[i].task.title:'-';
+            let s = logs[i].sector;
+            let t = logs[i].title;
+            let a = logs[i].action;
+
+            let string = '';
+            if(s==='do'){
+                string = '[ '+u+' ] task ( '+task+' ), '+s+'( '+ t +' ) ' +a; 
+            }else{
+                string = '[ '+u+' ] '+s+' ( '+ t +' ) ' +a;
+            }
+            let d = new Date(logs[i].date);
+
+            logView.push(
+                <View key={'logView'+i} style={styles.sectionWrap}>
+                    <Text style={styles.sectionTitle}>{d.toLocaleString('ko-KR')}</Text>
+                    <View style={styles.sectionView}>
+                        <Text style={styles.sectionContent}>{string}</Text>
+                    </View>
+                </View>);
+        }
+        return logView;
+    }
   render() {
     return (
         <View style={styles.container}>
             {/* 반복구간 */}
-            <View style={styles.sectionWrap}>
+            {this.viewLog()}
+            {/* <View style={styles.sectionWrap}>
                 <Text style={styles.sectionTitle}>18-11-28 17:05</Text>
                 <View style={styles.sectionView}>
                     <Text style={styles.sectionContent}>[홍길동] Task(최종테스트) 생성</Text>
@@ -23,7 +61,7 @@ export default class Record extends Component {
                 <View style={styles.sectionView}>
                     <Text style={styles.sectionContent}>[참여자A] Task(DB설계),Todo(유저) 완료</Text>
                 </View>
-            </View>
+            </View> */}
         </View>
     )
   }

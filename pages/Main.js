@@ -85,7 +85,7 @@ export default class Main extends Component {
                 <TouchableOpacity key={p.project._id}
                 onPress={()=>{
                     Service.selectProject(flag,idx);
-                    Service.goto('projectTab');
+                    // Service.goto('projectTab');
                 }}
                 style={styles.projectContainer}>
                     <Text style={styles.projectTitle}>{p.project.title}</Text>

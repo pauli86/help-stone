@@ -1,25 +1,36 @@
 import React, { Component } from 'react'
 import { StyleSheet,Image, Text, View, Dimensions,Button, ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
+import Service from '../lib/service';
 
 const {width, height} = Dimensions.get('window');
 
 export default class CompleteTask extends Component {
+    state = {
+        detailIdx:'',
+        doneIdx:'',
+    }
+    componentWillMount(){
+        Service.refreshDoneTask = (v)=>{this.setState(v)}
+    }
   render() {
     return (
         
         <View style={styles.container}>
             <View style={styles.sectionWrap}>
-                <Text style={styles.sectionTitle}>완료한 Task : 1개</Text>
+                <Text style={styles.sectionTitle}>완료한 Task : {this.props.doneTask.length}개</Text>
 
                 {/* task 반복구간 시작*/}
-                <View style={styles.sectionView}>
+
+                {this.props.doneTask.map((task,idx)=>{
+                    return (
+                        <View key={'doneTaskT'+idx} style={styles.sectionView}>
                     <View style={styles.taskView}>
                         <View style={styles.taskTitle}>
-                            <Text style={styles.taskTitleText}>Task 이름</Text>
+                            <Text style={styles.taskTitleText}>Task 명</Text>
                         </View>
                         <View style={styles.taskContent}>
-                            <Text style={styles.sectionContent}>UI</Text>
+                            <Text style={styles.sectionContent}>{task.title}</Text>
                         </View>
                     </View>
                 
@@ -28,7 +39,7 @@ export default class CompleteTask extends Component {
                             <Text style={styles.taskTitleText}>설명</Text>
                         </View>
                         <View style={styles.taskContent}>
-                            <Text style={styles.sectionContent}>모바일 앱 UI 작업</Text>
+                            <Text style={styles.sectionContent}>{task.desc}</Text>
                         </View>
                 </View>
                 <View style={styles.taskView}>
@@ -36,42 +47,53 @@ export default class CompleteTask extends Component {
                             <Text style={styles.taskTitleText}>완료일</Text>
                         </View>
                         <View style={styles.taskContent}>
-                            <Text style={styles.sectionContent}>18-11-27 13:08</Text>
+                            <Text style={styles.sectionContent}>{(new Date(task.doneDate)).toLocaleDateString('ko-KR')}</Text>
                         </View>
                 </View>
 
                 {/* 터치하면 todo list 보여주기 */}
-                <TouchableOpacity style={styles.listBtn}>
-                    <Text style={{color: '#4f4e4e'}}>TODO 리스트  <Ionicons name='ios-arrow-down' color='#777' size={18}/></Text>
+                <TouchableOpacity 
+                onPress={()=>{
+                    if(this.state.doneIdx==='m'+idx){
+                        Service.refreshDoneTask({doneIdx:'m'});
+                    }else{
+                        Service.refreshDoneTask({doneIdx:'m'+idx});
+                    }
+                }}
+                style={styles.listBtn}>
+                    <Text style={{color: '#4f4e4e'}}>TODO 리스트  
+                    {this.state.doneIdx==='m'+idx?
+                        <Ionicons name='ios-arrow-up' color='#777' size={18}/>
+                        :<Ionicons name='ios-arrow-down' color='#777' size={18}/>
+                    }
+                    </Text>
                 </TouchableOpacity>
                 
                 {/* todo View */}
+                {this.state.doneIdx!=='m'+idx?
+                <View></View>
+                :
                 <View style={styles.todoWrap}>
 
                     {/* todo 반복구간 시작*/}
-                    <View style={styles.todoView}>
-                        <Text style={styles.todoItem}>와이어 프레임</Text>
-                    </View>
-                    <View style={styles.todoView}>
-                        <Text style={styles.todoItem}>와이어 프레임</Text>
-                    </View>
-                    <View style={styles.todoView}>
-                        <Text style={styles.todoItem}>와이어 프레임</Text>
-                    </View>
-                    <View style={styles.todoView}>
-                        <Text style={styles.todoItem}>와이어 프레임</Text>
-                    </View>
-                    <View style={styles.todoView}>
-                        <Text style={styles.todoItem}>와이어 프레임</Text>
-                    </View>
-                    <View style={styles.todoView}>
-                        <Text style={styles.todoItem}>와이어 프레임</Text>
-                    </View>
+                    {task.doList.map((todo,didx)=>{
+                        return (
+                        <View key={'doneTaskDo'+didx} style={styles.todoView}>
+                            <Text style={styles.todoItem}>{todo.title}</Text>
+                        </View>        
+                        )
+                    })}
                     {/* todo 반복구간 끝*/}
 
                 </View>
+                }
+            </View>
+                    )
+                })
+            }
+                
 
-                </View>
+
                 {/* task 반복구간 끝*/}
                 
             </View>
