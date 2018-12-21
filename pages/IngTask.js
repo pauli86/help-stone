@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react'
-import { Alert, StyleSheet,Image, Text, View, Dimensions,TextInput, Button, ScrollView, StatusBar,TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Alert, StyleSheet,Image, Text, View, Dimensions,TextInput, Button, ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import Service from '../lib/service';
 
@@ -31,7 +31,8 @@ export default class IngTask extends Component {
     }
   render() {
     return (
-        <View style={styles.container}>
+        
+<View style={styles.container}>
                 {/* 터치 시 New Task 생성 View 보여주기 */}
                 <TouchableOpacity
                 onPress={()=>{
@@ -231,7 +232,11 @@ export default class IngTask extends Component {
                     }
                 }}
                 style={styles.listBtn}>
+                {this.state.ongoingIdx!=='o'+idx?
                     <Text style={{color: '#4f4e4e'}}>TODO 리스트  <Ionicons name='ios-arrow-down' color='#777' size={18}/></Text>
+                    :
+                    <Text style={{color: '#4f4e4e'}}>TODO 리스트  <Ionicons name='ios-arrow-up' color='#777' size={18}/></Text>
+                }
                 </TouchableOpacity>
                 {/* todo View */}
                 {this.state.ongoingIdx!=='o'+idx?
@@ -386,7 +391,8 @@ export default class IngTask extends Component {
                 {/* task 반복구간 끝*/}
 
             </View>
-        </View>
+            </View>
+       
         
     )
   }

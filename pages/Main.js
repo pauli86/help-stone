@@ -128,6 +128,13 @@ export default class Main extends Component {
             </View>
             <View style={styles.contentWrap}>
             <View style={styles.mainWrap}>
+            <TouchableOpacity style={styles.logoutContainer}
+                     onPress={()=>{
+                        Service.goto('login');
+                     }}
+                >
+                    <Text style={{color: "#fff", fontWeight:'bold',fontSize: 18}}>logout</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.newProjectContainer}
                      onPress={()=>{
                         Service.goto('createProject');
@@ -135,6 +142,7 @@ export default class Main extends Component {
                 >
                     <Text style={{color: "#fff", fontWeight:'bold',fontSize: 18}}>새 프로젝트 생성</Text>
                 </TouchableOpacity>
+                
 
 
                 {/* 진행중 프로젝트 section */}
@@ -209,8 +217,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#37889D',
-        borderRadius: 50,
+        borderRadius: 15,
         marginBottom: 20,
+    },
+    logoutContainer:{
+        width: '100%',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#57585D',
+        borderRadius: 15,
+        marginBottom: 10,
     },
     projectSector:{
         marginTop: 20,

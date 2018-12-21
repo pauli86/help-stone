@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, SafeAreaView, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Image, SafeAreaView, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 
 import Service from './lib/service';
@@ -106,8 +106,10 @@ export default class App extends Component {
       <SafeAreaView
        style={styles.container}
        >
+       <KeyboardAvoidingView style={{ flex: 1}}  behavior="padding">
         {/* {Service.goto('login')} */}
         {this.getScreen()}
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }

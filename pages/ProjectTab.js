@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet,Image, Text, View, Dimensions,  ScrollView, StatusBar,TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet,Image, Text, View, Dimensions,  ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import Summary from './Summary';
 import IngTask from './IngTask';
@@ -88,6 +88,7 @@ export default class ProjectTab extends Component {
       }
   render() {
     return (
+        
         <View style={styles.container}>
          <StatusBar hidden={true}/>
             <View style={styles.tabWrap}>
@@ -145,6 +146,8 @@ export default class ProjectTab extends Component {
                 {this.getScreen()}
             </ScrollView>
             </View>
+            
+   
     )
   }
 }

@@ -61,12 +61,11 @@ export default class CompleteTask extends Component {
                     }
                 }}
                 style={styles.listBtn}>
-                    <Text style={{color: '#4f4e4e'}}>TODO 리스트  
-                    {this.state.doneIdx==='m'+idx?
-                        <Ionicons name='ios-arrow-up' color='#777' size={18}/>
-                        :<Ionicons name='ios-arrow-down' color='#777' size={18}/>
+                    {this.state.doneIdx!=='m'+idx?
+                    <Text style={{color: '#4f4e4e'}}>TODO 리스트  <Ionicons name='ios-arrow-down' color='#777' size={18}/></Text>
+                    :
+                    <Text style={{color: '#4f4e4e'}}>TODO 리스트  <Ionicons name='ios-arrow-up' color='#777' size={18}/></Text>
                     }
-                    </Text>
                 </TouchableOpacity>
                 
                 {/* todo View */}
