@@ -157,8 +157,8 @@ export default class IngTask extends Component {
                 <View style={styles.taskView2}>                
                 <Button
                 onPress={()=>{
-                    console.log('task complete button pressed.');
-                    console.log(task._id);
+                    // console.log('task complete button pressed.');
+                    // console.log(task._id);
                     Alert.alert('해당 TASK를 수정하시겠습니까?',
                     '\n-- 수정 전 --\n\nTASK 명 : '+task.title+'\n TASK 설명 : '+task.desc+
                     '\n\n-- 수정 후 --\n\nTASK 명 : '+this.state.editTaskTitle+'\n TASK 설명 : '+this.state.editTaskDesc,
@@ -175,7 +175,7 @@ export default class IngTask extends Component {
                 <Button 
                 onPress={()=>{
                     Service.refreshOngoingTask({editTaskIdx:'t',editTaskTitle:'',editTaskDesc:''})
-                    console.log('task update button pressed.');
+                    // console.log('task update button pressed.');
                 }}
                 title="수정 취소" color="orange"/>
                 
@@ -184,8 +184,8 @@ export default class IngTask extends Component {
                 <View style={styles.taskView}>                
                 <Button
                 onPress={()=>{
-                    console.log('task complete button pressed.');
-                    console.log(task);
+                    // console.log('task complete button pressed.');
+                    // console.log(task);
                     Alert.alert('해당 TASK를 완료하시겠습니까?',
                     'TASK 명 : '+task.title+'\n TASK 설명 : '+task.desc,                    
                     [
@@ -200,12 +200,12 @@ export default class IngTask extends Component {
                 <Button 
                 onPress={()=>{
                     Service.refreshOngoingTask({editTaskIdx:'t'+idx,editTaskTitle:task.title,editTaskDesc:task.desc})
-                    console.log('task update button pressed.');
+                    // console.log('task update button pressed.');
                 }}
                 title="Task 수정" color="orange"/>
                 <Button
                 onPress={()=>{
-                    console.log('task delete button pressed.');
+                    // console.log('task delete button pressed.');
                     Alert.alert('해당 TASK를 삭제하시겠습니까?',
                     'TASK 명 : '+task.title+'\n TASK 설명 : '+task.desc,                    
                     [
@@ -260,7 +260,7 @@ export default class IngTask extends Component {
                                             Service.refreshOngoingTask({newDoTitle:''});
                                         }},
                                     ]);
-                            console.log('add todo button pressed');
+                            // console.log('add todo button pressed');
                         }}
                         title="추가" color="#4f4e4e"/>
                     </View>
@@ -276,7 +276,7 @@ export default class IngTask extends Component {
                                
                                 <TextInput 
                                 onChangeText={(val)=>{
-                                console.log('changed do title');
+                                // console.log('changed do title');
                                 this.setState({editDoTitle:val});
                                 }}
                                 value={this.state.editDoTitle}
@@ -310,7 +310,7 @@ export default class IngTask extends Component {
                             <Fragment>
                                  <TouchableOpacity
                                 onPress={()=>{
-                                    console.log('todo complete button pressed');  
+                                    // console.log('todo complete button pressed');  
                                     let alertStr='';
                                     let state ='';
                                     let stateStr='';

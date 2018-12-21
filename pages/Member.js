@@ -32,22 +32,22 @@ export default class Member extends Component {
     showMembers(){
         let memberView = [];               
             
-            console.log('[ TEAM ] : ',this.props.team);
+            // console.log('[ TEAM ] : ',this.props.team);
      
         return memberView;
     }
     componentDidMount(){        
-        console.log(this.props.manager);
+        // console.log(this.props.manager);
     }
     render() {
-        console.log('[ MEMBERS ] detail flag = ',this.state.detailIdx);
-        console.log('[ MEMBERS ] ongoing flag = ',this.state.ongoingIdx);
-        console.log('[ MEMBERS ] done flag = ',this.state.doneIdx);
+        // console.log('[ MEMBERS ] detail flag = ',this.state.detailIdx);
+        // console.log('[ MEMBERS ] ongoing flag = ',this.state.ongoingIdx);
+        // console.log('[ MEMBERS ] done flag = ',this.state.doneIdx);
         
             let name = this.props.manager.name;
             let id = this.props.manager.id;
             let email = this.props.manager.email?this.props.manager.email:'-';
-            console.log('this.props.manager.meta',this.props.manager.meta);
+            // console.log('this.props.manager.meta',this.props.manager.meta);
             let meta = this.props.manager.meta;
             let position = 'PM';
             let dt = meta.dt;
@@ -414,7 +414,7 @@ export default class Member extends Component {
                                             <View style={styles.todoWrap}>                    
                                                 {/* todo 반복구간 시작*/}
                                                 {task.doList.map((todo,didx)=>{
-                                                    console.log(todo);
+                                                    // console.log(todo);
                                                     return (
                                                     <View key={'mOnTaskDo'+didx} style={styles.todoView}>
                                                     {/*  TodoView시작 */}

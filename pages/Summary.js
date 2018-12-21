@@ -11,7 +11,7 @@ export default class Summary extends Component {
         }
     }
     componentDidMount(){
-        console.log('[Summary] did mount');
+        // console.log('[Summary] did mount');
         // setTimeout(()=>{
         //     // Service.project.project.title = 'changed after 3 sec';
         //     // console.log('service update');
@@ -27,7 +27,7 @@ export default class Summary extends Component {
         // console.log('props project = ',this.props.project);
     }
     componentWillUnmount(){
-        console.log('[Summary] will un-mount');
+        // console.log('[Summary] will un-mount');
     }
     viewLog(){
         /**
@@ -71,10 +71,10 @@ export default class Summary extends Component {
         return teamView;
     }
   render() {
-    console.log('[Summary] render');
+    // console.log('[Summary] render');
     let leftTime ='', totalTime='', leftDay='', totalDay='', periodPercent='', delayFlag='', doneTaskCnt='', doneDoCnt='', totalTaskCnt='', totalDoCnt='',doneAllCnt='',totalAllCnt='',taskPercent='',todoPercent='';
     if(!this.props.project){
-        console.log('[Summary] render -------- no project in props ');
+        // console.log('[Summary] render -------- no project in props ');
     }else{
     leftTime = ((new Date(this.props.project.dueDate)) - (new Date()))/(1000*60*60*24);            
     totalTime = ((new Date(this.props.project.dueDate)) - (new Date(this.props.project.startDate)))/(1000*60*60*24);

@@ -26,7 +26,7 @@ export default class ProjectTab extends Component {
         }
     }
     componentWillMount(){
-        console.log('[ project tab ] will mount');
+        // console.log('[ project tab ] will mount');
         Service.updateProject = (v)=>{
             this.setState(v);
         }
@@ -34,7 +34,7 @@ export default class ProjectTab extends Component {
         Service.timeChk();        
     }
     componentWillUnmount(){
-        console.log('[ project tab ] will unmount');
+        // console.log('[ project tab ] will unmount');
         Service.timeChkFlag=false;
         Service.timeChkOff();
     }
@@ -46,7 +46,7 @@ export default class ProjectTab extends Component {
     }
 
     getScreen(){
-        console.log('[ project tab ] get Screen');
+        // console.log('[ project tab ] get Screen');
         
         switch(this.state.current){
             case 'summary':
@@ -63,18 +63,18 @@ export default class ProjectTab extends Component {
     }
     getStyle(val){
         if(this.state.current===val){
-            console.log('선택된 스타일',val);
+            // console.log('선택된 스타일',val);
             return [styles.tabBtn,styles.activeTab];
         }else{
-            console.log('선택안된 스타일',val);
+            // console.log('선택안된 스타일',val);
             return styles.tabBtn;
             
         }
     }
     componentDidMount(){
-        console.log('[APP][componentDidMount]');    
+        // console.log('[APP][componentDidMount]');    
         Service.changeFuncPTab = (v)=>{this.navigate(v)};    
-        console.log('set time out');
+        // console.log('set time out');
         Service.changeFuncPTab('summary');
         this.setState({
             pFlag:true,

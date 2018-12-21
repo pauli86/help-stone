@@ -23,16 +23,16 @@ export default class Main extends Component {
         },3000);
     }
     componentDidUpdate(){
-        console.log('didupdate');
+        // console.log('didupdate');
         
     }
     componentWillMount(){
-        console.log('component will mount');
+        // console.log('component will mount');
         if(this.pchk==='none');
         this.projectChk();
     }
     componentWillUnmount(){
-        console.log('component will unmount');
+        // console.log('component will unmount');
         clearInterval(this.pchk);
         this.pchk = 'none';
     }
