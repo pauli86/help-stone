@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react'
-import { StyleSheet,Image, Text, View, Dimensions,TextInput, Button, ScrollView, StatusBar,TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet,Image, Text, View, Dimensions,TextInput, Button, ScrollView, StatusBar,TouchableOpacity } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import Service from '../lib/service';
 
@@ -7,16 +7,24 @@ const {width, height} = Dimensions.get('window');
 
 export default class IngTask extends Component {
     state = {
-        mode:'none', // or create
-        title:'',
-        desc:'',
-        doTitle:'',
-        todoMode:'none',        
-        editTodoIdx:'',
-        ongoingIdx:'',
+        mode:'none', // or create for task
+        
+        newTaskTitle:'',
+        newTaskDesc:'',
+        
+        newDoTitle:'',
+        
         editTaskIdx:'',
         editTaskTitle:'',
         editTaskDesc:'',
+        
+        editTodoIdx:'',
+        editDoTitle:'',
+        
+        todoMode:'none',  // or edit 
+        ongoingIdx:'', // selected task idx for todolist
+        
+                
     }
     componentWillMount(){
         Service.refreshOngoingTask = (v)=>{this.setState(v)}
@@ -30,7 +38,7 @@ export default class IngTask extends Component {
                     if(this.state.mode==='none'){
                         Service.refreshOngoingTask({mode:'create'});
                     }else{
-                        Service.refreshOngoingTask({mode:'none',title:'',desc:''});
+                        Service.refreshOngoingTask({mode:'none',newTaskTitle:'',newTaskDesc:''});
                     }
                 }}
                 style={styles.newProjectContainer}>
@@ -50,8 +58,8 @@ export default class IngTask extends Component {
                         </View>
                         <View style={styles.taskContent}>
                         <TextInput 
-                        onChangeText={(val)=>{this.setState({title:val})}}
-                        value={this.state.title}
+                        onChangeText={(val)=>{this.setState({newTaskTitle:val})}}
+                        value={this.state.newTaskTitle}
                         style={[styles.input,{width: '100%'}]} placeholder="Task이름을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
                         </View>
                     </View>
@@ -61,14 +69,24 @@ export default class IngTask extends Component {
                             <Text style={styles.taskTitleText}>설명</Text>
                         </View>
                         <View style={styles.taskContent}>
-                        <TextInput style={[styles.input,{width: '100%'}]} placeholder="Task설명을 입력하세요." multiline={true} spellCheck={false} underlineColorAndroid="#fff"/>
+                        <TextInput 
+                        onChangeText={(val)=>{this.setState({newTaskDesc:val})}}
+                        value={this.state.newTaskDesc}
+                        style={[styles.input,{width: '100%'}]} placeholder="Task설명을 입력하세요." multiline={true} spellCheck={false} underlineColorAndroid="#fff"/>
                         </View>
                 </View>
                 <Button 
                 onPress={()=>{
-                    console.log('tast add button pressed');
+                    Alert.alert('해당 TASK를 추가하시겠습니까?','TASK 명 : '+this.state.newTaskTitle+'\n TASK 설명 : '+this.state.newTaskDesc,[
+                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        {text: '승인', onPress: () => {
+                            console.log('OK Pressed');          
+                            Service.addTask(this.state.newTaskTitle,this.state.newTaskDesc);
+                            Service.refreshOngoingTask({mode:'none',newTaskTitle:'',newTaskDesc:''});
+                        }},
+                    ]);                    
                 }}
-                title="Task 추가하기" color="#4f4e4e"/>
+                title="Task 추가하기" color="#4f8e4e"/>
                 </View>
                 :
                 <View></View>
@@ -139,7 +157,18 @@ export default class IngTask extends Component {
                 <Button
                 onPress={()=>{
                     console.log('task complete button pressed.');
-                    console.log(task);
+                    console.log(task._id);
+                    Alert.alert('해당 TASK를 수정하시겠습니까?',
+                    '\n-- 수정 전 --\n\nTASK 명 : '+task.title+'\n TASK 설명 : '+task.desc+
+                    '\n\n-- 수정 후 --\n\nTASK 명 : '+this.state.editTaskTitle+'\n TASK 설명 : '+this.state.editTaskDesc,
+                    [
+                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        {text: '승인', onPress: () => {
+                            console.log('OK Pressed');                            
+                            Service.editTask(this.state.editTaskTitle,this.state.editTaskDesc,task._id);
+                            Service.refreshOngoingTask({editTaskIdx:'t',editTaskTitle:'',editTaskDesc:''});
+                        }},
+                    ]);                       
                 }}
                 title="수정 완료" color="green"/>
                 <Button 
@@ -156,6 +185,15 @@ export default class IngTask extends Component {
                 onPress={()=>{
                     console.log('task complete button pressed.');
                     console.log(task);
+                    Alert.alert('해당 TASK를 완료하시겠습니까?',
+                    'TASK 명 : '+task.title+'\n TASK 설명 : '+task.desc,                    
+                    [
+                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        {text: '승인', onPress: () => {
+                            console.log('OK Pressed');                            
+                            Service.completeTask(task._id);
+                        }},
+                    ]);
                 }}
                 title="Task 완료" color="green"/>
                 <Button 
@@ -167,6 +205,15 @@ export default class IngTask extends Component {
                 <Button
                 onPress={()=>{
                     console.log('task delete button pressed.');
+                    Alert.alert('해당 TASK를 삭제하시겠습니까?',
+                    'TASK 명 : '+task.title+'\n TASK 설명 : '+task.desc,                    
+                    [
+                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        {text: '승인', onPress: () => {
+                            console.log('OK Pressed');                            
+                            Service.delTask(task._id);
+                        }},
+                    ]);
                 }}
                 title="Task 삭제" color="red"/>
                 </View>
@@ -178,9 +225,9 @@ export default class IngTask extends Component {
                 onPress={()=>{
                     
                     if(this.state.ongoingIdx==='o'+idx){
-                        Service.refreshOngoingTask({ongoingIdx:'o',editTodoIdx:'d',doTitle:''});
+                        Service.refreshOngoingTask({ongoingIdx:'o',editTodoIdx:'d',editDoTitle:''});
                     }else{
-                        Service.refreshOngoingTask({ongoingIdx:'o'+idx,editTodoIdx:'d',doTitle:''});
+                        Service.refreshOngoingTask({ongoingIdx:'o'+idx,editTodoIdx:'d',editDoTitle:''});
                     }
                 }}
                 style={styles.listBtn}>
@@ -193,11 +240,23 @@ export default class IngTask extends Component {
                 <View style={styles.todoWrap}>                
                     <View style={styles.inputContainer}>
                         <TextInput
-                        onChangeText={(val)=>{this.setState({doTitle:val})}}
-                        value={this.state.doTitle}
+                        onChangeText={(val)=>{this.setState({newDoTitle:val})}}
+                        value={this.state.newDoTitle}
                         style={styles.input} placeholder="추가할 ToDo를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
                         <Button
-                        onPress={()=>{console.log('add todo button pressed')}}
+                        onPress={()=>{
+                            Alert.alert('해당 Do 를 추가하시겠습니까?',
+                                    'Do 명 : '+this.state.newDoTitle,
+                                    [
+                                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                        {text: '승인', onPress: () => {
+                                            console.log('OK Pressed');                            
+                                            Service.addDo(task._id,this.state.newDoTitle);
+                                            Service.refreshOngoingTask({newDoTitle:''});
+                                        }},
+                                    ]);
+                            console.log('add todo button pressed');
+                        }}
                         title="추가" color="#4f4e4e"/>
                     </View>
                 
@@ -207,27 +266,36 @@ export default class IngTask extends Component {
                     return (
                         <View key={'ongoingTaskDo'+didx} style={styles.todoView}>
                         {/* 추가 된 Todo 시작 */}
-
-
-                            
-
                             {this.state.editTodoIdx==='d'+didx?
                             <Fragment>
                                
                                 <TextInput 
-                                onPress={(val)=>{
+                                onChangeText={(val)=>{
                                 console.log('changed do title');
-                                this.setState({doTitle:val});
+                                this.setState({editDoTitle:val});
                                 }}
-                                value={this.state.doTitle}
+                                value={this.state.editDoTitle}
                                 style={[styles.input2,{marginLeft: 10}]} spellCheck={false} underlineColorAndroid="#fff"/>
                             
-                                <TouchableOpacity style={styles.todoBtn}>
+                                <TouchableOpacity
+                                onPress={()=>{
+                                    Alert.alert('해당 Do 를 변경하시겠습니까?',
+                                    'Do 명 : '+todo.title+'\n\n-- 변경 후 --\n\n Do 명 : '+this.state.editDoTitle,
+                                    [
+                                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                        {text: '승인', onPress: () => {
+                                            console.log('OK Pressed');                            
+                                            Service.editDo(todo._id,this.state.editDoTitle);
+                                            Service.refreshOngoingTask({editTodoIdx:'d',editDoTitle:''});
+                                        }},
+                                    ]);
+                                }}
+                                style={styles.todoBtn}>
                                     <Ionicons name='ios-checkmark-circle' color='#81c784' size={20}/>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                 onPress={()=>{
-                                    Service.refreshOngoingTask({editTodoIdx:'d',doTitle:''})
+                                    Service.refreshOngoingTask({editTodoIdx:'d',editDoTitle:''})
                                 }}
                                 style={styles.todoBtn}>
                                     <Ionicons name='ios-undo' color='gray' size={20}/>
@@ -236,29 +304,58 @@ export default class IngTask extends Component {
                             :
                             <Fragment>
                                  <TouchableOpacity
-                            onPress={()=>{
-                                console.log('todo complete button pressed');                                                       
-                            }}
-                            style={styles.todoBtn}>
-                            {todo.state==='done'?                            
-                            <Ionicons name='ios-checkbox' color='#81c784' size={20}/>
-                            :
-                            <Ionicons name='ios-square-outline' color='#4f4e4e' size={20}/>
-                            }
-                            </TouchableOpacity>
+                                onPress={()=>{
+                                    console.log('todo complete button pressed');  
+                                    let alertStr='';
+                                    let state ='';
+                                    let stateStr='';
+                                    if(todo.state==='done'){
+                                        alertStr='미완료 상태로 변경';
+                                        state='yet';
+                                        stateStr='완료';
+                                    }else{
+                                        alertStr='완료 상태로 변경';
+                                        state='done';
+                                        stateStr='미완료';
+                                    }
+                                    Alert.alert('해당 Do 를 "'+alertStr+'" 하시겠습니까?',
+                                    'Do 명 : '+todo.title+'\n현재 상태 : '+stateStr,
+                                    [
+                                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                        {text: '승인', onPress: () => {
+                                            console.log('OK Pressed');                            
+                                            Service.doneDo(todo._id,state);
+                                        }},
+                                    ]);                                                     
+                                }}
+                                style={styles.todoBtn}>
+                                {todo.state==='done'?                            
+                                <Ionicons name='ios-checkbox' color='#81c784' size={20}/>
+                                :
+                                <Ionicons name='ios-square-outline' color='#4f4e4e' size={20}/>
+                                }
+                                </TouchableOpacity>
                                 <View style={styles.todoTextView}>
                                     <Text style={styles.todoText}>{todo.title}</Text>
                                 </View>                            
                                 <TouchableOpacity
                                 onPress={()=>{
-                                    Service.refreshOngoingTask({editTodoIdx:'d'+didx,doTitle:todo.title})
+                                    Service.refreshOngoingTask({editTodoIdx:'d'+didx,editDoTitle:todo.title})
                                 }}
                                 style={styles.todoBtn}>
                                 <Ionicons name='ios-create' color='#4f4e4e' size={20}/>                            
                                 </TouchableOpacity>                            
                                 <TouchableOpacity
                                 onPress={()=>{
-                                    
+                                    Alert.alert('해당 DO 를 삭제하시겠습니까?',
+                                        'Do 명 : '+todo.title,
+                                        [
+                                        {text: '취소', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                                        {text: '승인', onPress: () => {
+                                            console.log('OK Pressed');                            
+                                            Service.delDo(todo._id);
+                                        }},
+                                    ]);
                                 }}
                                 style={styles.todoBtn}>
                                     <Ionicons name='ios-close-circle' color='#f44336' size={20}/>

@@ -30,6 +30,13 @@ export default class ProjectTab extends Component {
         Service.updateProject = (v)=>{
             this.setState(v);
         }
+        Service.timeChkFlag=true;
+        Service.timeChk();        
+    }
+    componentWillUnmount(){
+        console.log('[ project tab ] will unmount');
+        Service.timeChkFlag=false;
+        Service.timeChkOff();
     }
     
     navigate(val){
