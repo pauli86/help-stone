@@ -94,8 +94,8 @@ export default class Summary extends Component {
     totalDoCnt = this.props.meta.totalDoCnt?this.props.meta.totalDoCnt:0;        
     doneAllCnt = doneDoCnt + doneTaskCnt;
     totalAllCnt = totalDoCnt + totalTaskCnt;
-    taskPercent = Math.floor((doneTaskCnt/totalTaskCnt)*100)?Math.floor((doneTaskCnt/totalTaskCnt)*100):0 +'%';
-    todoPercent = Math.floor((doneDoCnt/totalDoCnt)*100)?Math.floor((doneDoCnt/totalDoCnt)*100):0 +'%';
+    taskPercent = Math.floor((doneTaskCnt/totalTaskCnt)*100)?(Math.floor((doneTaskCnt/totalTaskCnt)*100)+'%'):(0 +'%');
+    todoPercent = Math.floor((doneDoCnt/totalDoCnt)*100)?(Math.floor((doneDoCnt/totalDoCnt)*100)+'%'):(0 +'%');
     }
     return (
         !(this.props.project)?

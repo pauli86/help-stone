@@ -80,7 +80,7 @@ export default class Main extends Component {
             
             let doneAllCnt = doneDoCnt + doneTaskCnt;
             let totalAllCnt = totalDoCnt + totalTaskCnt;
-            let progressPercent = Math.floor((doneAllCnt/totalAllCnt)*100)?Math.floor((doneAllCnt/totalAllCnt)*100):0 +'%';
+            let progressPercent = Math.floor((doneAllCnt/totalAllCnt)*100)?(Math.floor((doneAllCnt/totalAllCnt)*100)+'%'):(0 +'%');
             return ( 
                 <TouchableOpacity key={p.project._id}
                 onPress={()=>{

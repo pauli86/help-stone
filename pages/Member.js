@@ -36,7 +36,7 @@ export default class Member extends Component {
      
         return memberView;
     }
-    componentDidMount(){
+    componentDidMount(){        
         console.log(this.props.manager);
     }
     render() {
@@ -47,6 +47,7 @@ export default class Member extends Component {
             let name = this.props.manager.name;
             let id = this.props.manager.id;
             let email = this.props.manager.email?this.props.manager.email:'-';
+            console.log('this.props.manager.meta',this.props.manager.meta);
             let meta = this.props.manager.meta;
             let position = 'PM';
             let dt = meta.dt;
