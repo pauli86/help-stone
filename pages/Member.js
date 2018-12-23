@@ -68,7 +68,7 @@ export default class Member extends Component {
                         <View style={styles.memberInfoWrap}>
                             <View style={styles.memberInfoView}>
                                 <View style={styles.memberName}>
-                                    <Text style={styles.memberNameText}>{name}</Text>
+                                    <Text style={id===Service.user.id?styles.memberNameText2:styles.memberNameText}>{name}</Text>
                                 </View>
                                 <View style={styles.memberEmail}>
                                     <Text style={styles.memberEmailText}>아이디: {id}</Text>
@@ -301,7 +301,7 @@ export default class Member extends Component {
                                 <View style={styles.memberInfoWrap}>
                                     <View style={styles.memberInfoView}>
                                         <View style={styles.memberName}>
-                                            <Text style={styles.memberNameText}>{member.name}</Text>
+                                            <Text style={member.id===Service.user.id?styles.memberNameText2:styles.memberNameText}>{member.name}</Text>
                                         </View>
                                         <View style={styles.memberEmail}>
                                             <Text style={styles.memberEmailText}>아이디: {member.id}</Text>
@@ -574,6 +574,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#4f4e4e'
+      },
+      memberNameText2:{
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#4f4ece'
       },
       memberEmailText:{
         color: '#77787b',

@@ -68,7 +68,7 @@ export default class Summary extends Component {
     }
     viewTeam(){
         let teamView = this.props.team.map((m,idx)=>{
-            return ( <Text key={'teamView'+idx} style={styles.otherContent}>{idx+1}. {m.name} (task {m.meta.ot}/{m.meta.ot+m.meta.dt})</Text> );
+            return ( <Text key={'teamView'+idx} style={m.id===Service.user.id?styles.otherContent2:styles.otherContent}>{idx+1}. {m.name} (task {m.meta.ot}/{m.meta.ot+m.meta.dt})</Text> );
         })
         return teamView;
     }
@@ -127,6 +127,7 @@ export default class Summary extends Component {
                     {/* <Text style={styles.sectionContent}>2018-11-28</Text> */}
                     <Text style={styles.sectionContent}>{(new Date(this.props.project.startDate)).toLocaleDateString('ko-KR')}</Text>
                 </View>
+                
             </View>
             <View style={styles.sectionWrap}>
                 <Text style={styles.sectionTitle}>마감일</Text>
@@ -184,7 +185,7 @@ export default class Summary extends Component {
                 <Text style={styles.sectionTitle}>멤버</Text>
                 <View style={[styles.sectionView,styles.otherView]}>
                     <Text style={styles.otherTitle}>PM</Text>
-                        <Text style={styles.otherContent}>{this.props.manager.name} (task {this.props.manager.meta.dt}/{this.props.manager.meta.dt+this.props.manager.meta.ot})</Text>
+                        <Text style={this.props.manager._id===Service.user._id?styles.otherContent2:styles.otherContent}>{this.props.manager.name} (task {this.props.manager.meta.dt}/{this.props.manager.meta.dt+this.props.manager.meta.ot})</Text>
                     <Text style={styles.otherTitle}>Members</Text>
                         {/* 반복 부분 */}
                         {this.viewTeam()}
