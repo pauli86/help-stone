@@ -89,8 +89,11 @@ export default class Main extends Component {
                 }}
                 style={styles.projectContainer}>
                     <Text style={styles.projectTitle}>{p.project.title}</Text>
-                    <Text style={styles.projectText}>PM : {p.project.manager.name}({p.project.manager.id})</Text>
-                    <Text style={styles.projectText}>Member : {p.project.team.length}명</Text>
+                    <Text style={
+                        Service.user.id!==p.project.manager.id?
+                        styles.projectText:styles.projectText2
+                        }>PM : {p.project.manager.name}({p.project.manager.id})</Text>                    
+                    <Text style={styles.projectText}>Member : {p.project.team.length}명</Text>    
                     <View style={styles.rangeWrap}>
                         <View style={styles.rangeTitleWrap}>
                             <View style={styles.rangeTitleView}>
@@ -254,6 +257,13 @@ const styles = StyleSheet.create({
     },
     projectText: {
         color: '#77787b',
+        fontSize: 12,
+        marginVertical: 3,
+        alignSelf: 'flex-end'
+    },
+    projectText2: {
+        color: '#7778cb',
+        fontWeight:'bold',
         fontSize: 12,
         marginVertical: 3,
         alignSelf: 'flex-end'

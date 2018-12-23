@@ -43,7 +43,9 @@ export default class Summary extends Component {
         
         for(let i = logLength-1, j = 4;(i>=0)&&(j>=0);i--,j--){
             let u = logs[i].user?logs[i].user.name:'-';
-            let task = logs[i].task?logs[i].task.title:'-';
+            let myFlag = Service.user._id===logs[i].user._id?true:false;
+            let xTask = logs[i].xTask?logs[i].xTask:'';
+            let task = logs[i].task?logs[i].task.title:'[삭제됨] ' +xTask;
             let s = logs[i].sector;
             let t = logs[i].title;
             let a = logs[i].action;
@@ -59,7 +61,7 @@ export default class Summary extends Component {
             logView.push(
                 <View key={'recentLogView'+j} style={styles.recordView}>
                         <Text style={styles.otherTitle}>{d.toLocaleString('ko-KR')}</Text>
-                        <Text style={styles.otherContent}>{string}</Text>
+                        <Text style={myFlag?styles.otherContent2:styles.otherContent}>{string}</Text>
                 </View>);
         }
         return logView;
@@ -297,6 +299,11 @@ const styles = StyleSheet.create({
     },
     otherContent:{
         color: '#77787b',
+        fontSize: 12,
+        marginBottom: 2
+    },
+    otherContent2:{
+        color: '#5758cb',
         fontSize: 12,
         marginBottom: 2
     },

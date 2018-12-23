@@ -58,26 +58,32 @@ export default class Login extends Component {
                 </View>
                 <View style={styles.btnContainer2}>
                   <TouchableOpacity
-                    onPress={() => Alert.alert(
-                      '아이디 찾기',
-                      '아이디를 찾으시겠습니까?',
-                      [
-                        {text: '취소', onPress: () => console.log('Cancel Pressed!')},
-                        {text: '확인', onPress: () => console.log('OK Pressed!')},
-                      ],
-                      { cancelable: false }
-                    )}
+                    onPress={() => {
+                      Service.goto('idFind');
+                    }
+                      // Alert.alert(
+                      // '아이디 찾기',
+                      // '아이디를 찾으시겠습니까?',
+                      // [
+                      //   {text: '취소', onPress: () => console.log('Cancel Pressed!')},
+                      //   {text: '확인', onPress: () => console.log('OK Pressed!')},
+                      // ],
+                      // { cancelable: false })                      
+                    }
                   ><Text style={styles.btnText}>아이디 찾기</Text></TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => Alert.alert(
-                      '비밀번호 재설정',
-                      '비밀번호를 재설정 하시겠습니까?',
-                      [
-                        {text: '취소', onPress: () => console.log('Cancel Pressed!')},
-                        {text: '확인', onPress: () => console.log('OK Pressed!')},
-                      ],
-                      { cancelable: false }
-                    )}
+                    onPress={() => {
+                      Service.goto('pwFind');
+                    }
+                      // Alert.alert(
+                      // '비밀번호 재설정',
+                      // '비밀번호를 재설정 하시겠습니까?',
+                      // [
+                      //   {text: '취소', onPress: () => console.log('Cancel Pressed!')},
+                      //   {text: '확인', onPress: () => console.log('OK Pressed!')},
+                      // ],
+                      // { cancelable: false })
+                    }
                   ><Text style={styles.btnText}>비밀번호 재설정</Text></TouchableOpacity>
                 </View>
               </View>

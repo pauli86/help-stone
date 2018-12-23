@@ -1,8 +1,26 @@
 import React, { Component } from 'react'
-import { StyleSheet, StatusBar,Image,Text, View, Dimensions, TextInput, Button, ScrollView } from 'react-native';
+import { Alert,StyleSheet, StatusBar,Image,Text, View, Dimensions, TextInput, Button, ScrollView } from 'react-native';
+
+import Service from '../lib/service';
 
 const {width, height} = Dimensions.get('window');
 export default class PwFind extends Component {
+  state={
+    id:'',
+    name:'',
+    stuNo:'',
+    pw:'',
+    pwChk:''
+  }
+  componentDidMount(){
+    this.setState({
+      id:'',
+      name:'',
+      stuNo:'',
+      pw:'',
+      pwChk:'',
+    });
+  }
   render() {
     return (
         <View style={styles.container}>
@@ -18,31 +36,69 @@ export default class PwFind extends Component {
           <View style={styles.inputWrap}>
           <View style={styles.inputContainer}>
                   <Text style={styles.inputTitle}>ID</Text>
-                  <TextInput style={styles.input} placeholder="아이디를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+                  <TextInput 
+                  onChangeText={(val)=>{this.setState({id:val})}}
+                  value={this.state.id}
+                  style={styles.input} placeholder="아이디를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
                 </View>
             <View style={styles.inputContainer}>
               <Text style={styles.inputTitle}>이름</Text>
-              <TextInput style={styles.input} placeholder="이름을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+              <TextInput
+              onChangeText={(val)=>{this.setState({name:val})}}
+              value={this.state.name}
+              style={styles.input} placeholder="이름을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.inputTitle}>학번</Text>
-              <TextInput style={styles.input} keyboardType="number-pad" placeholder="학번을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+              <TextInput 
+              onChangeText={(val)=>{this.setState({stuNo:val})}}
+              value={this.state.stuNo}
+              style={styles.input} keyboardType="number-pad" placeholder="학번을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
             </View>
             <View style={styles.inputContainer}>
                   <Text style={styles.inputTitle}>PW</Text>
-                  <TextInput style={styles.input} secureTextEntry={true} placeholder="비밀번호를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+                  <TextInput
+                  onChangeText={(val)=>{this.setState({pw:val})}}
+                  value={this.state.pw}
+                  style={styles.input} secureTextEntry={true} placeholder="비밀번호를 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.inputTitle}>PW 확인</Text>
-                  <TextInput style={styles.input} secureTextEntry={true} placeholder="비밀번호를 다시 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+                  <TextInput 
+                  onChangeText={(val)=>{this.setState({pwChk:val})}}
+                  value={this.state.pwChk}
+                  style={styles.input} secureTextEntry={true} placeholder="비밀번호를 다시 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
                 </View>
           </View>
           <View style={styles.btnWrap}>
             <View style={styles.btnContainer}>
-              <Button title="재설정" color="#345080"/>
+              <Button onPress={()=>{
+                if(this.state.id===''){
+                  return Alert.alert('비밀번호 재설정','아이디를 입력하세요.');
+                }else if(this.state.name===''){
+                  return Alert.alert('비밀번호 재설정','이름을 입력하세요.');
+                }else if(this.state.stuNo===''){
+                  return Alert.alert('비밀번호 재설정','학번을 입력하세요.');
+                }else if(this.state.pw===''){
+                  return Alert.alert('비밀번호 재설정','비밀번호를 입력하세요.');
+                }else if(this.state.pw!==this.state.pwChk){
+                  return Alert.alert('비밀번호 재설정','비밀번호확인이 비밀번호와 다릅니다.\n확인 후 시도해주세요.');
+                }else{                  
+                  Service._resetPW(
+                    this.state.id,
+                    this.state.name,
+                    this.state.stuNo,
+                    this.state.pw
+                    );
+                }
+              }}
+              title="재설정" color="#345080"/>
             </View>
             <View style={styles.btnContainer}>
-              <Button title="취소" color="#77787b"/>
+              <Button onPress={()=>{
+                Service.goto('login');
+              }}
+              title="취소" color="#77787b"/>
             </View>
           </View>
         </View>

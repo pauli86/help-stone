@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
-import { StyleSheet, Image,StatusBar, Text, View, Dimensions, TextInput, Button } from 'react-native';
+import { Alert, StyleSheet, Image,StatusBar, Text, View, Dimensions, TextInput, Button } from 'react-native';
+
+import Service from '../lib/service';
 
 const {width, height} = Dimensions.get('window');
 export default class IdFind extends Component {
+  state={
+    name:'',
+    stuNo:'',
+  }
+  componentDidMount(){
+    this.setState({name:'',stuNo:''});
+  }
   render() {
     return (
         <View style={styles.container}>
@@ -17,19 +26,39 @@ export default class IdFind extends Component {
           <View style={styles.inputWrap}>
             <View style={styles.inputContainer}>
               <Text style={styles.inputTitle}>이름</Text>
-              <TextInput style={styles.input} placeholder="이름을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+              <TextInput 
+              onChangeText={(val)=>{this.setState({name:val})}}
+              value={this.state.name}
+              style={styles.input} placeholder="이름을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.inputTitle}>학번</Text>
-              <TextInput style={styles.input} keyboardType="number-pad" placeholder="학번을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
+              <TextInput 
+              onChangeText={(val)=>{this.setState({stuNo:val})}}
+              value={this.state.stuNo}
+              style={styles.input} keyboardType="number-pad" placeholder="학번을 입력하세요." spellCheck={false} underlineColorAndroid="#fff"/>
             </View>
           </View>
           <View style={styles.btnWrap}>
             <View style={styles.btnContainer}>
-              <Button title="아이디 찾기" color="#345080"/>
+              <Button 
+              onPress={()=>{
+                if(this.state.name===''){
+                  return Alert.alert('아이디 찾기','이름을 입력하세요.');
+                }else if(this.state.stuNo===''){
+                  return Alert.alert('아이디 찾기','학번을 입력하세요.');
+                }else{
+                  Service._findId(this.state.name.toLowerCase(),this.state.stuNo.toLowerCase());
+                }
+              }}
+              title="아이디 찾기" color="#345080"/>
             </View>
             <View style={styles.btnContainer}>
-              <Button title="취소" color="#77787b"/>
+              <Button 
+              onPress={()=>{
+                Service.goto('login');
+              }}
+              title="취소" color="#77787b"/>
             </View>
           </View>
         </View>

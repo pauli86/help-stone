@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet,Image, Text, View, Dimensions,  ScrollView, StatusBar,TouchableOpacity } from 'react-native';
-
+import Service from '../lib/service';
 export default class Record extends Component {
     viewLog(){
         /**
@@ -13,10 +13,11 @@ export default class Record extends Component {
         let logView=[];   
         let logs = this.props.project.logList;     
         let logLength = logs.length;
-        
         for(let i = logLength-1;i>=0;i--){
             let u = logs[i].user?logs[i].user.name:'-';
-            let task = logs[i].task?logs[i].task.title:'-';
+            let myFlag = Service.user._id===logs[i].user._id?true:false;
+            let xTask = logs[i].xTask?logs[i].xTask:'';
+            let task = logs[i].task?logs[i].task.title:'[삭제됨] ' +xTask;
             let s = logs[i].sector;
             let t = logs[i].title;
             let a = logs[i].action;
@@ -32,7 +33,7 @@ export default class Record extends Component {
             logView.push(
                 <View key={'logView'+i} style={styles.sectionWrap}>
                     <Text style={styles.sectionTitle}>{d.toLocaleString('ko-KR')}</Text>
-                    <View style={styles.sectionView}>
+                    <View style={myFlag?styles.sectionView2:styles.sectionView}>                    
                         <Text style={styles.sectionContent}>{string}</Text>
                     </View>
                 </View>);
@@ -94,6 +95,16 @@ const styles = StyleSheet.create({
           padding: 10,
           borderRadius: 5
       },
+      sectionView2:{
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#22b',
+        borderWidth:2,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        width: '100%',
+        padding: 10,
+        borderRadius: 5
+    },
       sectionContent:{
           color: '#4f4e4e',
           fontSize: 12
